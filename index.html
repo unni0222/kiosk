@@ -12,7 +12,6 @@
     --shell-text:#f2f4f7;
     --shell-dim:#9aa4b2;
     --practice:#ffc53d;
-    --ok:#3ddc84;
     --radius:14px;
   }
 
@@ -23,7 +22,7 @@
     color:var(--shell-text);
     font-family:'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;
     font-size:clamp(18px,1.9vw,21px);
-    line-height:1.45;
+    line-height:1.5;
     -webkit-text-size-adjust:100%;
     overflow-x:hidden;
   }
@@ -31,39 +30,59 @@
 
   /* ---------- 연습 프레임 ---------- */
   .shell{
-    min-height:100vh;
     min-height:100dvh;
     display:flex;
     flex-direction:column;
+    padding-bottom:var(--navh);
   }
+  :root{--navh:86px;}
   .bar{
-    position:sticky;top:0;z-index:20;
     display:flex;align-items:center;gap:10px;
-    padding:10px 14px;
+    padding:12px 14px;
     background:var(--shell-panel);
     border-bottom:1px solid var(--shell-line);
     flex-wrap:wrap;
   }
   .tag{
-    font-size:.8em;font-weight:800;letter-spacing:.08em;
+    font-size:.82em;font-weight:800;letter-spacing:.08em;
     color:#14161a;background:var(--practice);
     padding:6px 11px;border-radius:999px;white-space:nowrap;
   }
   .mission{
     flex:1 1 240px;min-width:0;
-    font-size:1em;color:var(--shell-text);
+    font-size:1.02em;color:var(--shell-text);
   }
   .mission b{color:var(--practice);font-weight:800;}
-  .bar-btns{display:flex;gap:8px;flex:0 0 auto;}
+
+  /* 아래 고정 조작바 — 한 손으로 닿는 자리 */
+  .nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+    padding:9px 10px calc(9px + env(safe-area-inset-bottom));
+    background:var(--shell-panel);
+    border-top:2px solid var(--shell-line);
+  }
   .bar-btn{
     border:2px solid var(--shell-line);
     background:#262b33;color:var(--shell-text);
-    min-height:56px;padding:0 18px;border-radius:12px;
-    font-size:1em;font-weight:800;white-space:nowrap;
+    min-height:62px;padding:8px 6px;border-radius:14px;
+    font-size:clamp(18px,2.2vw,21px);font-weight:800;white-space:nowrap;
   }
-  .bar-btn:active{transform:scale(.95);}
+  .bar-btn:active{transform:translateY(1px);}
   .bar-btn.on{background:var(--practice);color:#14161a;border-color:var(--practice);}
-  .bar-btn:disabled{opacity:.35;}
+  .bar-btn:disabled{opacity:.3;}
+
+  /* 아래에 더 있다는 표시 */
+  .more{
+    position:fixed;left:50%;transform:translateX(-50%);
+    bottom:calc(var(--navh) + 10px);z-index:49;
+    background:var(--practice);color:#14161a;
+    font-size:17px;font-weight:800;
+    padding:10px 18px;border-radius:999px;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);
+    display:none;pointer-events:none;
+  }
+  .more.show{display:block;}
 
   .stage{
     flex:1;
@@ -80,9 +99,9 @@
     position:relative;
     overflow:hidden;
   }
-  .kiosk[data-theme="cafe"]{--k-bg:#33241c;--k-text:#fbf4e8;--k-card:#452f24;--k-line:#5d4133;--k-accent:#d2712f;--k-accent-text:#fff;--k-sub:#e0cdba;}
-  .kiosk[data-theme="clinic"]{--k-bg:#ffffff;--k-text:#0f2c52;--k-card:#f1f6fc;--k-line:#c8dcf2;--k-accent:#1668c4;--k-accent-text:#fff;--k-sub:#3d5c80;}
-  .kiosk[data-theme="gov"]{--k-bg:#f3f5f1;--k-text:#173d2c;--k-card:#ffffff;--k-line:#c2d2c8;--k-accent:#166b46;--k-accent-text:#fff;--k-sub:#41604f;}
+  .kiosk[data-theme="cafe"]{--k-bg:#33241c;--k-text:#fbf4e8;--k-card:#452f24;--k-line:#5d4133;--k-accent:#d2712f;--k-accent-text:#fff;--k-sub:#d8c3ae;}
+  .kiosk[data-theme="clinic"]{--k-bg:#ffffff;--k-text:#0f2c52;--k-card:#f1f6fc;--k-line:#c8dcf2;--k-accent:#1668c4;--k-accent-text:#fff;--k-sub:#4a6688;}
+  .kiosk[data-theme="gov"]{--k-bg:#f3f5f1;--k-text:#173d2c;--k-card:#ffffff;--k-line:#c2d2c8;--k-accent:#166b46;--k-accent-text:#fff;--k-sub:#4d6b5c;}
   .kiosk[data-theme="home"]{--k-bg:#14161a;--k-text:#f2f4f7;--k-card:#1e2229;--k-line:#333a44;--k-accent:#ffc53d;--k-accent-text:#14161a;--k-sub:#9aa4b2;}
 
   .k-head{
@@ -91,7 +110,7 @@
     display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
   }
   .k-brand{font-size:1.05em;font-weight:800;letter-spacing:-.01em;}
-  .k-step{margin-left:auto;font-size:.92em;color:var(--k-sub);font-weight:700;}
+  .k-step{margin-left:auto;font-size:1em;color:var(--k-sub);font-weight:700;}
 
   .k-body{
     flex:1;
@@ -105,7 +124,7 @@
     margin:0 0 8px;
   }
   .k-sub{
-    font-size:clamp(18px,2vw,22px);
+    font-size:clamp(17px,2vw,22px);
     color:var(--k-sub);margin:0 0 clamp(16px,2.5vw,26px);
   }
 
@@ -118,51 +137,38 @@
 
   .opt{
     display:flex;align-items:center;gap:14px;
-    width:100%;min-height:84px;
+    width:100%;min-height:78px;
     padding:16px 20px;
     background:var(--k-card);
     border:2px solid var(--k-line);
     border-radius:var(--radius);
     text-align:left;
-    transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+    transition:transform .08s ease, box-shadow .12s ease;
   }
-  .opt:active{transform:scale(.96);border-color:var(--k-accent);}
+  .opt:active{transform:scale(.985);}
   .opt-main{flex:1;min-width:0;}
-  .opt-label{font-size:clamp(21px,2.6vw,28px);font-weight:800;letter-spacing:-.01em;display:block;}
-  .opt-note{font-size:clamp(17px,1.7vw,19px);color:var(--k-sub);margin-top:3px;display:block;}
-  .opt-price{font-size:clamp(19px,2.1vw,23px);font-weight:800;white-space:nowrap;}
+  .opt-label{font-size:clamp(20px,2.6vw,28px);font-weight:800;letter-spacing:-.01em;}
+  .opt-note{font-size:clamp(17px,1.7vw,19px);color:var(--k-sub);margin-top:3px;}
+  .opt-price{font-size:clamp(18px,2.1vw,23px);font-weight:800;white-space:nowrap;}
   .opt.primary{background:var(--k-accent);border-color:var(--k-accent);color:var(--k-accent-text);}
-  .opt.primary .opt-note{color:var(--k-accent-text);opacity:.9;}
+  .opt.primary .opt-note{color:var(--k-accent-text);opacity:.85;}
   .opt.ghost{background:transparent;}
 
   /* 도움말: 눌러야 할 곳만 밝게 */
-  .kiosk.help .opt:not(.hint),
-  .kiosk.help .key:not(.hint),
-  .kiosk.help .finger button:not(.hint),
-  .kiosk.help .cardslot:not(.hint){opacity:.28;}
-  .kiosk.help .opt.hint,
-  .kiosk.help .key.hint,
-  .kiosk.help .finger button.hint,
-  .kiosk.help .cardslot.hint,
-  .kiosk.help .touch.hint{
+  .kiosk.help .opt:not(.hint){opacity:.45;}
+  .kiosk.help .opt.hint{
     box-shadow:0 0 0 5px var(--practice);
     position:relative;
   }
-  .kiosk.help .opt.hint::after,
-  .kiosk.help .key.hint::after,
-  .kiosk.help .finger button.hint::after,
-  .kiosk.help .cardslot.hint::after,
-  .kiosk.help .touch.hint::after{
+  .kiosk.help .opt.hint::after{
     content:'여기';
     position:absolute;right:-6px;top:-14px;
     background:var(--practice);color:#14161a;
-    font-size:15px;font-weight:800;
-    padding:3px 10px;border-radius:999px;
+    font-size:14px;font-weight:800;
+    padding:3px 9px;border-radius:999px;
   }
   @media (prefers-reduced-motion:no-preference){
-    .kiosk.help .opt.hint,
-    .kiosk.help .key.hint,
-    .kiosk.help .cardslot.hint{animation:pulse 1.6s ease-in-out infinite;}
+    .kiosk.help .opt.hint{animation:pulse 1.6s ease-in-out infinite;}
     @keyframes pulse{
       0%,100%{box-shadow:0 0 0 5px var(--practice);}
       50%{box-shadow:0 0 0 10px rgba(255,197,61,.45);}
@@ -194,37 +200,26 @@
   .display{
     background:var(--k-card);border:2px solid var(--k-line);
     border-radius:var(--radius);
-    padding:18px;margin-bottom:14px;
+    padding:18px;margin-bottom:16px;
     font-size:clamp(28px,5vw,44px);font-weight:800;
-    letter-spacing:.14em;text-align:center;min-height:82px;
+    letter-spacing:.14em;text-align:center;min-height:78px;
     word-break:break-all;
   }
-  .display .ph{color:var(--k-sub);letter-spacing:.1em;font-size:.62em;}
-  .display.shake{animation:shake .3s;}
-  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-9px);}75%{transform:translateX(9px);}}
+  .display .ph{color:var(--k-sub);letter-spacing:.1em;}
   .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
   .key{
-    min-height:72px;
+    min-height:66px;
     background:var(--k-card);border:2px solid var(--k-line);
     border-radius:var(--radius);
-    font-size:clamp(25px,3.4vw,32px);font-weight:800;
-    transition:transform .08s ease;
+    font-size:clamp(24px,3.4vw,32px);font-weight:800;
   }
-  .key:active{transform:scale(.94);}
+  .key:active{transform:scale(.96);}
   .key.act{background:var(--k-accent);border-color:var(--k-accent);color:var(--k-accent-text);font-size:clamp(19px,2.2vw,24px);}
+  .key.del{
+    background:transparent;border-color:var(--k-sub);color:var(--k-sub);
+    font-size:clamp(19px,2.2vw,24px);
+  }
   .key:disabled{opacity:.4;}
-
-  /* 연습번호 안내 */
-  .practice-num{
-    background:var(--k-card);border:2px dashed var(--k-accent);
-    border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;
-  }
-  .practice-num .pn-label{font-size:clamp(16px,1.8vw,19px);color:var(--k-sub);}
-  .practice-num .pn-value{
-    font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:.12em;
-    color:var(--k-accent);margin-top:4px;
-  }
-  .practice-num .pn-warn{font-size:clamp(16px,1.8vw,19px);margin-top:8px;font-weight:700;}
 
   /* 지문 */
   .finger{
@@ -236,38 +231,37 @@
     border-radius:28px;
     border:5px solid var(--k-accent);background:var(--k-card);
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-    font-size:clamp(19px,2.2vw,24px);font-weight:800;color:var(--k-accent);
+    font-size:clamp(18px,2.2vw,24px);font-weight:800;color:var(--k-accent);
   }
-  .finger button:active{transform:scale(.96);}
   .finger .ring{
     width:64px;height:64px;border-radius:50%;
     border:5px solid var(--k-accent);border-top-color:transparent;
   }
 
-  /* 카드 투입구 */
-  .cardwrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
-  .cardslot{
-    width:min(420px,92%);
-    background:var(--k-card);border:3px solid var(--k-accent);
-    border-radius:20px;padding:26px 22px;
-    display:flex;flex-direction:column;align-items:center;gap:14px;
+  /* 확인표 */
+  .lines{
+    background:var(--k-card);border:2px solid var(--k-line);
+    border-radius:var(--radius);overflow:hidden;margin-bottom:18px;
   }
-  .cardslot:active{transform:scale(.97);}
-  .slot-line{
-    width:80%;height:16px;border-radius:8px;
-    background:var(--k-bg);border:2px solid var(--k-accent);
+  .line{
+    display:flex;justify-content:space-between;gap:14px;
+    padding:15px 18px;border-bottom:1px solid var(--k-line);
+    font-size:clamp(18px,2.1vw,23px);
   }
-  .slot-arrow{font-size:38px;line-height:1;color:var(--k-accent);}
-  @media (prefers-reduced-motion:no-preference){
-    .slot-arrow{animation:down 1.4s ease-in-out infinite;}
-    @keyframes down{0%,100%{transform:translateY(-5px);}50%{transform:translateY(5px);}}
-  }
-  .slot-text{font-size:clamp(19px,2.2vw,24px);font-weight:800;text-align:center;}
+  .line:last-child{border-bottom:0;}
+  .line span:first-child{color:var(--k-sub);}
+  .line span:last-child{font-weight:800;text-align:right;}
+  .line.total span{font-size:clamp(20px,2.4vw,26px);font-weight:800;color:var(--k-text);}
 
   /* 진행중 */
   .waiting{
     flex:1;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:20px;text-align:center;
+    align-items:center;justify-content:flex-start;gap:20px;text-align:center;
+    padding-top:clamp(10px,5vh,50px);
+  }
+  .waiting .tap{
+    margin-top:6px;font-size:clamp(17px,2vw,20px);
+    color:var(--k-sub);font-weight:700;
   }
   .bars{display:flex;gap:8px;}
   .bars i{width:14px;height:44px;background:var(--k-accent);border-radius:5px;opacity:.3;}
@@ -280,109 +274,25 @@
   }
 
   /* 완료 */
-  .done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;}
+  .done{
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;text-align:center;gap:14px;
+    padding-top:clamp(6px,3vh,30px);
+  }
   .ticket{
     background:var(--k-card);border:3px solid var(--k-accent);
-    border-radius:20px;padding:clamp(18px,3.4vw,30px) clamp(26px,6vw,58px);
+    border-radius:20px;padding:clamp(20px,4vw,34px) clamp(28px,6vw,60px);
   }
-  .ticket-label{font-size:clamp(18px,2vw,21px);color:var(--k-sub);margin-bottom:6px;}
-  .ticket-num{font-size:clamp(44px,9vw,80px);font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--k-accent);}
-  .done-msg{font-size:clamp(19px,2.4vw,26px);font-weight:700;max-width:22em;margin:0;}
+  .ticket-label{font-size:clamp(17px,2vw,21px);color:var(--k-sub);margin-bottom:6px;}
+  .ticket-num{font-size:clamp(46px,10vw,88px);font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--k-accent);}
+  .done-msg{font-size:clamp(19px,2.4vw,26px);font-weight:700;max-width:22em;}
   .done-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
-  .done-btns .opt{width:auto;min-height:68px;}
-
-  /* 미션 채점 */
-  .verdict{
-    width:min(560px,100%);
-    border-radius:18px;padding:18px 20px;
-    border:3px solid var(--k-line);background:var(--k-card);
-    text-align:left;
-  }
-  .verdict.pass{border-color:var(--ok);}
-  .verdict.near{border-color:var(--practice);}
-  .v-head{font-size:clamp(22px,2.8vw,28px);font-weight:800;margin-bottom:10px;text-align:center;}
-  .verdict.pass .v-head{color:var(--ok);}
-  .verdict.near .v-head{color:var(--practice);}
-  .v-item{
-    display:flex;gap:10px;align-items:flex-start;
-    padding:9px 0;border-top:1px solid var(--k-line);
-    font-size:clamp(18px,2vw,21px);
-  }
-  .v-item:first-of-type{border-top:0;}
-  .v-mark{flex:0 0 auto;font-weight:800;}
-  .v-item.no .v-mark{color:var(--practice);}
-  .v-item.yes .v-mark{color:var(--ok);}
-
-  /* AI 물어보기 */
-  .askbar{margin-top:18px;display:flex;justify-content:center;}
-  .askbtn{
-    border:2px dashed var(--k-line);color:var(--k-sub);
-    background:transparent;border-radius:999px;
-    min-height:56px;padding:0 22px;
-    font-size:clamp(17px,1.9vw,20px);font-weight:700;
-  }
-  .askbtn:active{transform:scale(.96);}
-
-  .sheet{
-    position:fixed;inset:0;z-index:50;
-    background:rgba(0,0,0,.72);
-    display:none;align-items:flex-end;justify-content:center;
-  }
-  .sheet.on{display:flex;}
-  .sheet-in{
-    width:min(680px,100%);
-    background:var(--shell-panel);color:var(--shell-text);
-    border-radius:22px 22px 0 0;
-    border-top:3px solid var(--practice);
-    padding:22px 20px 26px;
-    max-height:88vh;overflow:auto;
-  }
-  .sheet-title{font-size:clamp(21px,2.6vw,26px);font-weight:800;margin:0 0 6px;}
-  .sheet-lead{font-size:clamp(17px,1.9vw,20px);color:var(--shell-dim);margin:0 0 16px;}
-  .prompt{
-    background:#14161a;border:2px solid var(--shell-line);border-radius:14px;
-    padding:16px 18px;font-size:clamp(19px,2.2vw,23px);line-height:1.6;
-    font-weight:700;white-space:pre-wrap;
-    user-select:text;-webkit-user-select:text;
-  }
-  .sheet-steps{margin:16px 0 0;padding-left:22px;font-size:clamp(17px,1.9vw,20px);color:var(--shell-dim);}
-  .sheet-steps li{margin-bottom:6px;}
-  .sheet-btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
-  .sheet-btns button{
-    flex:1 1 140px;min-height:60px;border-radius:14px;
-    font-size:clamp(18px,2vw,21px);font-weight:800;
-  }
-  .btn-copy{background:var(--practice);color:#14161a;}
-  .btn-close{background:#262b33;color:var(--shell-text);border:2px solid var(--shell-line);}
-
-  .toast{
-    position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
-    background:var(--practice);color:#14161a;
-    padding:14px 22px;border-radius:999px;
-    font-size:19px;font-weight:800;z-index:60;
-    opacity:0;pointer-events:none;transition:opacity .2s;
-  }
-  .toast.on{opacity:1;}
-
-  /* 확인표 */
-  .lines{
-    background:var(--k-card);border:2px solid var(--k-line);
-    border-radius:var(--radius);overflow:hidden;margin-bottom:18px;
-  }
-  .line{
-    display:flex;justify-content:space-between;gap:14px;
-    padding:15px 18px;border-bottom:1px solid var(--k-line);
-    font-size:clamp(19px,2.1vw,23px);
-  }
-  .line:last-child{border-bottom:0;}
-  .line span:first-child{color:var(--k-sub);}
-  .line span:last-child{font-weight:800;text-align:right;}
-  .line.total span{font-size:clamp(21px,2.4vw,26px);font-weight:800;color:var(--k-text);}
+  .done-btns .opt{width:auto;min-height:64px;}
 
   /* 홈 */
   .home-head{padding:clamp(22px,4vw,38px) clamp(16px,4vw,40px) 6px;max-width:1000px;margin:0 auto;width:100%;}
   .home-title{font-size:clamp(27px,4.4vw,42px);font-weight:800;letter-spacing:-.02em;margin:0 0 8px;}
-  .home-sub{font-size:clamp(18px,2vw,21px);color:var(--shell-dim);margin:0;}
+  .home-sub{font-size:clamp(17px,2vw,21px);color:var(--shell-dim);margin:0;}
   .machines{display:grid;gap:14px;grid-template-columns:1fr;}
   @media (min-width:820px){.machines{grid-template-columns:repeat(3,1fr);}}
   .machine{
@@ -390,10 +300,10 @@
     background:var(--shell-panel);text-align:left;
     display:flex;flex-direction:column;gap:8px;min-height:150px;
   }
-  .machine:active{transform:scale(.98);border-color:var(--practice);}
-  .m-kind{font-size:.85em;font-weight:800;letter-spacing:.1em;color:var(--practice);}
+  .machine:active{transform:scale(.99);}
+  .m-kind{font-size:.8em;font-weight:800;letter-spacing:.1em;color:var(--practice);}
   .m-name{font-size:clamp(22px,2.8vw,28px);font-weight:800;}
-  .m-goal{font-size:clamp(17px,1.8vw,19px);color:var(--shell-dim);}
+  .m-goal{font-size:clamp(18px,1.8vw,20px);color:var(--shell-dim);}
   .note{
     margin-top:18px;padding:16px 18px;border-radius:14px;
     border:1px dashed var(--shell-line);color:var(--shell-dim);
@@ -409,33 +319,15 @@
   <div class="bar">
     <span class="tag">연습용</span>
     <div class="mission" id="mission">기계를 하나 고르세요</div>
-    <div class="bar-btns">
-      <button class="bar-btn" id="btnHelp" disabled>도움말</button>
-      <button class="bar-btn" id="btnBack" disabled>뒤로</button>
-      <button class="bar-btn" id="btnHome">처음으로</button>
-    </div>
   </div>
   <div class="stage"><div class="kiosk" id="kiosk" data-theme="home"></div></div>
 </div>
-
-<div class="sheet" id="sheet">
-  <div class="sheet-in">
-    <h3 class="sheet-title">이 화면을 AI에게 물어보기</h3>
-    <p class="sheet-lead">스마트폰으로 이 화면을 찍고, 아래 문장을 그대로 말하거나 붙여넣으세요.</p>
-    <div class="prompt" id="promptBox"></div>
-    <ol class="sheet-steps">
-      <li>스마트폰으로 이 화면을 사진 찍기</li>
-      <li>Gemini를 열고 사진 넣기</li>
-      <li>아래 문장을 말하거나 붙여넣기</li>
-    </ol>
-    <div class="sheet-btns">
-      <button class="btn-copy" id="btnCopy">문장 복사하기</button>
-      <button class="btn-close" id="btnCloseSheet">닫기</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
+<div class="more" id="more">↓ 아래에 더 있어요</div>
+<nav class="nav">
+  <button class="bar-btn" id="btnHelp" disabled>도움말</button>
+  <button class="bar-btn" id="btnBack" disabled>뒤로</button>
+  <button class="bar-btn" id="btnHome">처음으로</button>
+</nav>
 
 <script>
 const FLOWS = {
@@ -448,62 +340,38 @@ const FLOWS = {
     mission: '<b>아이스 아메리카노 1잔</b>을 <b>포장</b>으로 주문하고 <b>카드</b>로 결제하세요',
     start: 'c0',
     steps: 9,
-    review: st => {
-      const cart = st.cart || [];
-      const one = cart.length === 1 && cart[0].name === '아이스 아메리카노';
-      return [
-        [st.dine === '포장', st.dine === '포장'
-          ? '포장으로 잘 고르셨어요'
-          : '매장에서 먹기로 되어 있어요. 미션은 포장이었어요'],
-        [one, one
-          ? '아이스 아메리카노 1잔, 정확합니다'
-          : (cart.length === 0 ? '담은 음료가 없어요'
-             : cart.length > 1 ? cart.length + '잔이 담겼어요. 미션은 1잔이었어요'
-             : '고르신 음료는 ' + cart[0].name + '이에요. 미션은 아이스 아메리카노였어요')],
-        [st.pay === '카드', st.pay === '카드'
-          ? '카드로 결제하셨어요'
-          : '결제는 ' + (st.pay || '다른 방법') + '으로 하셨어요. 미션은 카드였어요']
-      ];
-    },
     screens: {
-      c0: { kind:'attract', title:'주문하시려면\n화면을 눌러주세요', sub:'이곳은 카드로만 결제됩니다', next:'c1',
-            ask:'이 카페 키오스크 화면에서 주문을 시작하려고 해. 어디를 눌러야 하는지 알려줘.' },
+      c0: { kind:'attract', title:'주문하시려면\n화면을 눌러주세요', sub:'이곳은 카드로만 결제됩니다', next:'c1' },
       c1: { kind:'choice', step:1, title:'어디서 드시나요?', sub:'포장을 고르면 뚜껑을 함께 드립니다',
-            ask:'이 화면에서 커피를 포장해서 가져가려고 해. 어느 버튼을 눌러야 해?',
             opts:[ {label:'매장에서 먹고 갈게요', next:'c2', set:{dine:'매장'}},
                    {label:'포장해서 가져갈게요', next:'c2', set:{dine:'포장'}, hint:true} ] },
       c2: { kind:'choice', step:2, title:'무엇을 드시겠어요?', sub:'종류를 먼저 고릅니다', cols:'grid',
-            ask:'이 화면에서 아메리카노를 주문하려고 해. 어느 종류를 먼저 눌러야 해?',
             opts:[ {label:'커피', next:'c3', hint:true}, {label:'차', next:'c3t'},
                    {label:'주스', next:'c3j'}, {label:'디저트', next:'c3d'} ] },
       c3: { kind:'choice', step:3, title:'커피', sub:'드실 음료를 눌러주세요',
-            ask:'이 화면에서 아메리카노를 고르려고 해. 어디를 눌러야 하는지 한 단계씩 알려줘.',
             opts:[ {label:'아메리카노', price:'2,000원', next:'c4', set:{pick:'아메리카노', cost:2000}, hint:true},
                    {label:'카페라떼', price:'3,000원', next:'c4', set:{pick:'카페라떼', cost:3000}},
                    {label:'카푸치노', price:'3,500원', next:'c4', set:{pick:'카푸치노', cost:3500}},
-                   {label:'이전 화면으로', next:'c2', ghost:true} ] },
+                   {label:'앞으로 돌아가기', next:'c2', ghost:true} ] },
       c3t: { kind:'choice', step:3, title:'차', sub:'드실 음료를 눌러주세요',
             opts:[ {label:'녹차', price:'2,500원', next:'c4', set:{pick:'녹차', cost:2500}},
                    {label:'유자차', price:'3,000원', next:'c4', set:{pick:'유자차', cost:3000}},
-                   {label:'이전 화면으로', next:'c2', ghost:true} ] },
+                   {label:'앞으로 돌아가기', next:'c2', ghost:true} ] },
       c3j: { kind:'choice', step:3, title:'주스', sub:'모두 차갑게 나옵니다',
             opts:[ {label:'오렌지주스', price:'4,000원', next:'c5', set:{pick:'오렌지주스', cost:4000}, add:true},
                    {label:'딸기주스', price:'4,500원', next:'c5', set:{pick:'딸기주스', cost:4500}, add:true},
-                   {label:'이전 화면으로', next:'c2', ghost:true} ] },
+                   {label:'앞으로 돌아가기', next:'c2', ghost:true} ] },
       c3d: { kind:'choice', step:3, title:'디저트', sub:'',
             opts:[ {label:'치즈케이크', price:'5,000원', next:'c5', set:{pick:'치즈케이크', cost:5000}, add:true},
                    {label:'쿠키', price:'2,000원', next:'c5', set:{pick:'쿠키', cost:2000}, add:true},
-                   {label:'이전 화면으로', next:'c2', ghost:true} ] },
+                   {label:'앞으로 돌아가기', next:'c2', ghost:true} ] },
       c4: { kind:'choice', step:4, title:'따뜻한 것과 차가운 것,\n어느 쪽으로 드릴까요?', sub:'',
-            ask:'이 화면에서 차가운 아이스로 주문하려고 해. 어느 버튼이야?',
             opts:[ {label:'따뜻하게', note:'HOT', next:'c5', set:{temp:'따뜻한 '}, add:true},
                    {label:'차갑게', note:'ICE', next:'c5', set:{temp:'아이스 '}, add:true, hint:true} ] },
       c5: { kind:'confirm', step:5, title:'주문하신 내용입니다', sub:'맞으면 결제하기를 눌러주세요',
-            ask:'이 주문확인 화면에 무엇이 담겨 있는지 읽어주고, 결제하려면 어디를 눌러야 하는지 알려줘.',
             lines: st => {
               const cart = st.cart || [];
               const rows = cart.map(it => [it.name, it.price.toLocaleString() + '원']);
-              if(!rows.length) rows.push(['담은 것 없음', '-']);
               rows.push(['드시는 방법', st.dine || '매장']);
               rows.push(['총 금액', cart.reduce((a, b) => a + b.price, 0).toLocaleString() + '원']);
               return rows;
@@ -512,14 +380,11 @@ const FLOWS = {
                    {label:'처음부터 다시', next:'c1', ghost:true, reset:true},
                    {label:'결제하기', next:'c6', primary:true, hint:true} ] },
       c6: { kind:'choice', step:6, title:'어떻게 결제하시겠어요?', sub:'',
-            ask:'이 화면에서 신용카드로 결제하려고 해. 어느 버튼을 눌러야 해?',
-            opts:[ {label:'카드', note:'신용·체크카드', next:'c7', set:{pay:'카드'}, hint:true},
-                   {label:'휴대폰 간편결제', note:'삼성페이·애플페이 등', next:'c7', set:{pay:'간편결제'}},
-                   {label:'쿠폰·기프티콘', note:'바코드를 아래에 대주세요', next:'c7', set:{pay:'쿠폰'}} ] },
-      c7: { kind:'card', step:7, title:'카드를 넣어주세요',
-            sub:'화살표 방향으로 끝까지 넣은 다음, 아래를 한 번 눌러주세요', next:'c8',
-            ask:'이 화면에서 카드를 어디에 어떻게 넣어야 하는지 알려줘. 카드는 언제 빼면 돼?' },
-      c8: { kind:'wait', step:8, title:'결제하는 중입니다', sub:'카드를 빼지 마세요', next:'c9', ms:1800 },
+            opts:[ {label:'카드', note:'신용·체크카드', next:'c7', hint:true},
+                   {label:'휴대폰 간편결제', note:'삼성페이·애플페이 등', next:'c7'},
+                   {label:'쿠폰·기프티콘', note:'바코드를 아래에 대주세요', next:'c7'} ] },
+      c7: { kind:'wait', step:7, title:'카드를 넣어주세요', sub:'화살표 방향으로 끝까지 넣으시면 됩니다', next:'c8', ms:4000 },
+      c8: { kind:'wait', step:8, title:'결제하는 중입니다', sub:'카드를 빼지 마세요', next:'c9', ms:3500 },
       c9: { kind:'done', step:9, label:'주문번호', num:'A-27',
             msg:'주문이 끝났습니다.\n번호가 불리면 받으러 오세요.' }
     }
@@ -533,49 +398,29 @@ const FLOWS = {
     goal: '생년월일로 본인확인을 하고 내과 진료를 접수하기',
     mission: '<b>내과</b> 진료를 접수하세요. 본인확인은 <b>생년월일</b>로 합니다',
     start: 'h0',
-    steps: 7,
-    review: st => [
-      [st.task === '접수', st.task === '접수'
-        ? '진료 접수를 잘 고르셨어요'
-        : (st.task || '다른 것') + '을(를) 하셨어요. 오늘 미션은 진료 접수였어요'],
-      [st.idBy === '생년월일', st.idBy === '생년월일'
-        ? '생년월일로 본인확인을 하셨어요'
-        : '본인확인은 건강보험증으로 하셨어요. 미션은 생년월일이었어요'],
-      [st.dept === '내과', st.dept === '내과'
-        ? '내과로 정확히 접수하셨어요'
-        : (st.dept ? st.dept + '로 접수하셨어요. 미션은 내과였어요' : '진료과를 고르지 않으셨어요')]
-    ],
+    steps: 8,
     screens: {
-      h0: { kind:'attract', title:'화면을 눌러\n접수를 시작하세요', sub:'도움이 필요하면 옆 창구로 오세요', next:'h1',
-            ask:'이 병원 무인접수기 화면에서 접수를 시작하려고 해. 어디를 눌러야 해?' },
+      h0: { kind:'attract', title:'화면을 눌러\n접수를 시작하세요', sub:'도움이 필요하면 옆 창구로 오세요', next:'h1' },
       h1: { kind:'choice', step:1, title:'무엇을 하러 오셨어요?', sub:'',
-            ask:'이 화면에서 오늘 진료를 받으러 왔어. 어느 버튼을 눌러야 해?',
             opts:[ {label:'진료 접수', note:'오늘 진료를 받으러 왔어요', next:'h2', set:{task:'접수'}, hint:true},
                    {label:'진료비 수납', note:'진료를 마치고 돈을 내요', next:'h2', set:{task:'수납'}},
                    {label:'증명서 발급', note:'진단서·영수증을 뽑아요', next:'h2', set:{task:'증명서'}} ] },
       h2: { kind:'choice', step:2, title:'본인 확인을 하겠습니다', sub:'편한 방법을 고르세요',
-            ask:'이 화면에서 생년월일로 본인확인을 하려고 해. 어디를 눌러야 해?',
-            opts:[ {label:'생년월일 누르기', note:'숫자 6자리', next:'h3', set:{idBy:'생년월일'}, hint:true},
-                   {label:'건강보험증 넣기', note:'아래 투입구에 넣어주세요', next:'h3', set:{idBy:'보험증'}} ] },
-      h3: { kind:'keypad', step:3, title:'생년월일을 눌러주세요', sub:'앞의 6자리만 누르면 됩니다',
-            len:6, ph:'6자리', practice:'480312',
-            practiceLabel:'오늘은 이 연습번호를 눌러주세요',
-            warn:'실제 생년월일은 누르지 마세요',
-            ask:'이 화면에서 생년월일 6자리를 누르려고 해. 어떻게 누르고 어디를 눌러야 다음으로 넘어가?',
+            opts:[ {label:'생년월일 누르기', note:'숫자 6자리', next:'h3', hint:true},
+                   {label:'건강보험증 넣기', note:'아래 투입구에 넣어주세요', next:'h3'} ] },
+      h3: { kind:'keypad', step:3, title:'생년월일을 눌러주세요', sub:'1948년 3월 12일이면 480312', len:6, ph:'예) 480312',
             next: st => st.task === '수납' ? 'p1' : st.task === '증명서' ? 'd1' : 'h4' },
 
       h4: { kind:'choice', step:4, title:'어느 과에서 진료받으세요?', sub:'', cols:'grid',
-            ask:'이 화면에서 내과 진료를 접수하려고 해. 어느 버튼이야?',
             opts:[ {label:'내과', next:'h5', set:{dept:'내과', floor:'3층'}, hint:true},
                    {label:'정형외과', next:'h5', set:{dept:'정형외과', floor:'2층'}},
                    {label:'이비인후과', next:'h5', set:{dept:'이비인후과', floor:'2층'}},
                    {label:'안과', next:'h5', set:{dept:'안과', floor:'4층'}} ] },
       h5: { kind:'confirm', step:5, title:'이 내용이 맞습니까?', sub:'',
-            ask:'이 확인 화면에 뭐라고 적혀 있는지 읽어주고, 맞으면 어디를 눌러야 하는지 알려줘.',
             lines: st => [ ['성함','홍○○ 님'], ['진료과', st.dept || '내과'], ['오늘 진료','오후 2시 30분'] ],
             opts:[ {label:'아니에요, 다시 할게요', next:'h1', ghost:true},
                    {label:'맞습니다', next:'h6', primary:true, hint:true} ] },
-      h6: { kind:'wait', step:6, title:'접수증을 뽑고 있습니다', sub:'잠시만 기다려주세요', next:'h7', ms:2000 },
+      h6: { kind:'wait', step:6, title:'접수증을 뽑고 있습니다', sub:'잠시만 기다려주세요', next:'h7', ms:3500 },
       h7: { kind:'done', step:7, label:'대기번호', num:'12',
             msg: st => '접수가 끝났습니다.\n' + (st.floor || '3층') + ' ' + (st.dept || '내과') + ' 앞에서 기다려주세요.' },
 
@@ -584,11 +429,9 @@ const FLOWS = {
             opts:[ {label:'창구에서 낼게요', next:'h1', ghost:true},
                    {label:'결제하기', next:'p2', primary:true, hint:true} ] },
       p2: { kind:'choice', step:5, title:'어떻게 결제하시겠어요?', sub:'',
-            opts:[ {label:'카드', note:'투입구에 끝까지 넣어주세요', next:'p3', set:{pay:'카드'}, hint:true},
-                   {label:'휴대폰 간편결제', note:'삼성페이·애플페이 등', next:'p3', set:{pay:'간편결제'}} ] },
-      p3: { kind:'card', step:6, title:'카드를 넣어주세요',
-            sub:'끝까지 넣은 다음, 아래를 한 번 눌러주세요', next:'p3b' },
-      p3b: { kind:'wait', step:6, title:'결제하는 중입니다', sub:'카드를 빼지 마세요', next:'p4', ms:1800 },
+            opts:[ {label:'카드', note:'투입구에 끝까지 넣어주세요', next:'p3', hint:true},
+                   {label:'휴대폰 간편결제', note:'삼성페이·애플페이 등', next:'p3'} ] },
+      p3: { kind:'wait', step:6, title:'결제하는 중입니다', sub:'카드를 빼지 마세요', next:'p4', ms:3500 },
       p4: { kind:'done', step:7, label:'수납 완료', num:'9,500원',
             msg:'수납이 끝났습니다.\n영수증과 처방전을 챙겨\n1층 약국으로 가세요.' },
 
@@ -602,7 +445,7 @@ const FLOWS = {
                            ['통수','1통'], ['수수료', (st.fee || 0) === 0 ? '없음' : st.fee.toLocaleString() + '원'] ],
             opts:[ {label:'다시 고를게요', next:'d1', ghost:true},
                    {label:'뽑기', next:'d3', primary:true, hint:true} ] },
-      d3: { kind:'wait', step:6, title:'서류를 뽑고 있습니다', sub:'종이가 나올 때까지 기다려주세요', next:'d4', ms:2200 },
+      d3: { kind:'wait', step:6, title:'서류를 뽑고 있습니다', sub:'종이가 나올 때까지 기다려주세요', next:'d4', ms:4000 },
       d4: { kind:'done', step:7, label:'발급 완료', num:'1통',
             msg: st => { const d = st.doc || '진료비 영수증';
                          const c = d.charCodeAt(d.length - 1);
@@ -619,66 +462,35 @@ const FLOWS = {
     goal: '주민등록등본 1통을 카드로 결제해 뽑기',
     mission: '<b>주민등록등본 1통</b>을 뽑으세요. 주소는 <b>현재 주소만</b>, 결제는 <b>카드</b>입니다',
     start: 'g0',
-    steps: 10,
-    review: st => [
-      [st.doc === '주민등록등본', st.doc === '주민등록등본'
-        ? '주민등록등본을 잘 고르셨어요'
-        : (st.doc || '다른 서류') + '을(를) 고르셨어요. 미션은 주민등록등본이었어요'],
-      [st.addr === '현재', st.addr === '현재'
-        ? '현재 주소만으로 잘 고르셨어요'
-        : '지난 주소까지 모두 표시로 되어 있어요. 미션은 현재 주소만이었어요'],
-      [st.copies === 1, st.copies === 1
-        ? '1통, 정확합니다'
-        : (st.copies || 1) + '통으로 되어 있어요. 미션은 1통이었어요'],
-      [st.pay === '카드', st.pay === '카드'
-        ? '카드로 결제하셨어요'
-        : '동전으로 내셨어요. 미션은 카드였어요']
-    ],
+    order: ['g0','g1','g2','g3','g4','g5','g6','g7','g8','g9','g10'],
     screens: {
-      g0: { kind:'attract', title:'화면을 눌러\n시작하세요', sub:'수수료는 카드와 동전으로 낼 수 있습니다', next:'g1',
-            ask:'이 무인민원발급기 화면에서 등본을 뽑기 시작하려고 해. 어디를 눌러야 해?' },
-      g1: { kind:'choice', step:1, title:'무엇을 하시겠어요?', sub:'',
-            ask:'이 화면에서 주민등록등본을 뽑으려고 해. 어느 버튼을 먼저 눌러야 해?',
+      g0: { kind:'attract', title:'화면을 눌러\n시작하세요', sub:'수수료는 카드와 동전으로 낼 수 있습니다', next:'g1' },
+      g1: { kind:'choice', title:'무엇을 하시겠어요?', sub:'',
             opts:[ {label:'증명서 발급', note:'등본·초본·가족관계증명서', next:'g2', hint:true},
                    {label:'발급 내역 확인', next:'g2'},
                    {label:'사용법 안내', next:'g2'} ] },
-      g2: { kind:'choice', step:2, title:'어떤 서류가 필요하세요?', sub:'', cols:'grid',
-            ask:'이 화면에서 주민등록등본을 고르려고 해. 어느 버튼이야?',
-            opts:[ {label:'주민등록등본', next:'g3', set:{doc:'주민등록등본'}, hint:true},
-                   {label:'주민등록초본', next:'g3', set:{doc:'주민등록초본'}},
-                   {label:'가족관계증명서', next:'g3', set:{doc:'가족관계증명서'}},
-                   {label:'인감증명서', note:'창구에서만 됩니다', next:'g3', set:{doc:'인감증명서'}} ] },
-      g3: { kind:'keypad', step:3, title:'주민등록번호를 눌러주세요', sub:'앞 6자리, 뒤 7자리 순서로 누릅니다',
-            len:13, ph:'13자리', practice:'900101 - 1234567', practiceRaw:'9001011234567',
-            practiceLabel:'오늘은 이 연습번호를 눌러주세요',
-            warn:'⚠ 실제 주민등록번호는 절대 누르지 마세요',
-            ask:'이 화면에서 숫자 13자리를 누르려고 해. 다 누르면 어디를 눌러야 다음으로 넘어가?',
-            next:'g4' },
-      g4: { kind:'finger', step:4, title:'지문을 대주세요', sub:'네모난 칸에 검지를 3초간 올려두세요', next:'g5',
-            ask:'이 화면에서 지문을 어디에 어떻게 대야 하는지 알려줘.' },
-      g5: { kind:'choice', step:5, title:'주소를 어떻게 표시할까요?', sub:'대부분 현재 주소만으로 충분합니다',
-            ask:'이 화면에서 현재 주소만 나오게 하려면 어느 버튼을 눌러야 해?',
-            opts:[ {label:'현재 주소만 표시', note:'가장 많이 쓰는 방법', next:'g6', set:{addr:'현재'}, hint:true},
-                   {label:'지난 주소까지 모두 표시', note:'이사한 기록이 다 나옵니다', next:'g6', set:{addr:'전체'}} ] },
-      g6: { kind:'choice', step:6, title:'몇 통 뽑으시겠어요?', sub:'한 통에 200원입니다',
+      g2: { kind:'choice', title:'어떤 서류가 필요하세요?', sub:'', cols:'grid',
+            opts:[ {label:'주민등록등본', next:'g3', hint:true}, {label:'주민등록초본', next:'g3'},
+                   {label:'가족관계증명서', next:'g3'}, {label:'인감증명서', note:'창구에서만 됩니다', next:'g3'} ] },
+      g3: { kind:'keypad', title:'주민등록번호를 눌러주세요', sub:'13자리입니다. 연습이니 아무 숫자나 괜찮습니다', len:13, next:'g4', ph:'예) 8102222002614' },
+      g4: { kind:'finger', title:'지문을 대주세요', sub:'네모난 칸에 검지를 3초간 올려두세요', next:'g5' },
+      g5: { kind:'choice', title:'주소를 어떻게 표시할까요?', sub:'대부분 현재 주소만으로 충분합니다',
+            opts:[ {label:'현재 주소만 표시', note:'가장 많이 쓰는 방법', next:'g6', hint:true},
+                   {label:'지난 주소까지 모두 표시', note:'이사한 기록이 다 나옵니다', next:'g6'} ] },
+      g6: { kind:'choice', title:'몇 통 뽑으시겠어요?', sub:'한 통에 200원입니다',
             opts:[ {label:'1통', note:'200원', next:'g7', set:{copies:1}, hint:true},
                    {label:'2통', note:'400원', next:'g7', set:{copies:2}},
                    {label:'3통', note:'600원', next:'g7', set:{copies:3}} ] },
-      g7: { kind:'confirm', step:7, title:'이 내용이 맞습니까?', sub:'맞으면 결제하기를 눌러주세요',
-            ask:'이 확인 화면을 읽어주고, 결제하려면 어디를 눌러야 하는지 알려줘.',
-            lines: st => [ ['서류', st.doc || '주민등록등본'], ['주소 표시', st.addr === '전체' ? '지난 주소까지' : '현재 주소만'],
-                           ['통수', (st.copies || 1) + '통'], ['수수료', ((st.copies || 1) * 200).toLocaleString() + '원'] ],
+      g7: { kind:'confirm', title:'이 내용이 맞습니까?', sub:'맞으면 결제하기를 눌러주세요',
+            lines: st => [ ['서류','주민등록등본'], ['통수', (st.copies || 1) + '통'], ['수수료', ((st.copies || 1) * 200).toLocaleString() + '원'] ],
             opts:[ {label:'통수 바꾸기', next:'g6', ghost:true},
                    {label:'결제하기', next:'g8', primary:true, hint:true} ] },
-      g8: { kind:'choice', step:8, title:'수수료를 내주세요', sub:'',
-            ask:'이 화면에서 카드로 수수료를 내려고 해. 어느 버튼이야?',
-            opts:[ {label:'카드', note:'투입구에 끝까지 넣어주세요', next:'g8b', set:{pay:'카드'}, hint:true},
-                   {label:'동전', note:'동전 투입구에 넣어주세요', next:'g9', set:{pay:'동전'}} ] },
-      g8b: { kind:'card', step:8, title:'카드를 넣어주세요',
-            sub:'끝까지 넣은 다음, 아래를 한 번 눌러주세요', next:'g9' },
-      g9: { kind:'wait', step:9, title:'서류를 뽑고 있습니다', sub:'종이가 나올 때까지 기다려주세요', next:'g10', ms:2400 },
-      g10: { kind:'done', step:10, label:'발급 완료', num: st => (st.copies || 1) + '통',
-            msg: st => (st.doc || '주민등록등본') + '이 나왔습니다.\n아래 출구에서 가져가세요.' }
+      g8: { kind:'choice', title:'수수료를 내주세요', sub:'',
+            opts:[ {label:'카드', note:'투입구에 끝까지 넣어주세요', next:'g9', hint:true},
+                   {label:'동전', note:'동전 투입구에 넣어주세요', next:'g9'} ] },
+      g9: { kind:'wait', title:'서류를 뽑고 있습니다', sub:'종이가 나올 때까지 기다려주세요', next:'g10', ms:4000 },
+      g10: { kind:'done', label:'발급 완료', num: st => (st.copies || 1) + '통',
+            msg:'주민등록등본이 나왔습니다.\n아래 출구에서 가져가세요.' }
     }
   }
 };
@@ -688,50 +500,33 @@ const missionEl = document.getElementById('mission');
 const btnHelp = document.getElementById('btnHelp');
 const btnBack = document.getElementById('btnBack');
 const btnHome = document.getElementById('btnHome');
-const sheet = document.getElementById('sheet');
-const promptBox = document.getElementById('promptBox');
-const toastEl = document.getElementById('toast');
 
 let flowKey = null, cur = null, stack = [], help = false, typed = '', timer = null, state = {};
 
-/* ---------- 소리 ---------- */
-let ac = null;
-function beep(freq){
-  try{
-    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-    if(ac.state === 'suspended') ac.resume();
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sine';
-    o.frequency.value = freq || 880;
-    g.gain.setValueAtTime(.07, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + .09);
-    o.connect(g); g.connect(ac.destination);
-    o.start(); o.stop(ac.currentTime + .1);
-  }catch(e){}
-}
-document.addEventListener('pointerdown', e => {
-  if(e.target.closest('button, .attract, .machine')) beep();
-}, true);
-
-/* ---------- 도구 ---------- */
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function nl(s){ return esc(s).replace(/\n/g,'<br>'); }
+
 function nx(v){ return typeof v === 'function' ? v(state) : v; }
+
 function clearTimer(){ if(timer){ clearTimeout(timer); timer = null; } }
-function snap(){ return JSON.parse(JSON.stringify(state)); }
 
-let toastTimer = null;
-function toast(msg){
-  toastEl.textContent = msg;
-  toastEl.classList.add('on');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toastEl.classList.remove('on'), 1800);
+/* 폰 뒤로가기 대응: 연습 중에는 사이트를 벗어나지 않고 한 화면씩 돌아간다 */
+let spare = false;
+function armBack(){
+  if(spare) return;
+  try{ history.pushState({ kiosk: 1 }, ''); spare = true; }catch(e){}
 }
-
-/* ---------- 화면 이동 ---------- */
-function go(id, push = true, before = null){
+function stepBack(){
   clearTimer();
-  if(push && cur) stack.push({ id: cur, st: before || snap() });
+  if(stack.length){ cur = stack.pop(); typed = ''; render(); return true; }
+  if(flowKey){ home(); return true; }
+  return false;
+}
+window.addEventListener('popstate', () => { spare = false; stepBack(); });
+
+function go(id, push = true){
+  clearTimer();
+  if(push && cur) stack.push(cur);
   cur = id; typed = '';
   render();
 }
@@ -765,15 +560,15 @@ function renderHome(){
     <div class="k-body">
       <div class="machines">${cards}</div>
       <div class="note">
-        <b>막히면 위쪽 도움말</b>을 누르세요. 눌러야 할 곳만 밝게 보입니다.<br>
-        기계마다 화면이 다릅니다. 그래서 <b>모르는 화면은 사진을 찍어 AI에게 물어보는 것</b>이 가장 빠릅니다.<br>
-        화면 아래 <b>“이 화면 AI에게 물어보기”</b>를 누르면 물어볼 문장이 나옵니다.
+        <b>막히면 아래쪽 도움말</b>을 누르세요. 눌러야 할 곳만 밝게 보입니다.<br>
+        기계마다 화면이 다릅니다. 그래서 <b>모르는 화면은 사진을 찍어 AI에게 물어보는 것</b>이 가장 빠릅니다.
       </div>
     </div>`;
 
   kiosk.querySelectorAll('[data-flow]').forEach(b => {
     b.onclick = () => startFlow(b.dataset.flow);
   });
+  checkMore();
 }
 
 function startFlow(key){
@@ -801,35 +596,27 @@ function optHTML(o, i){
   </button>`;
 }
 
-function askHTML(s, f){
-  const q = s.ask || ('이 키오스크 화면에서 ' + f.goal + '을(를) 하려고 해.\n다음에 눌러야 할 버튼을 한 단계씩 쉽게 알려줘.');
-  return `<div class="askbar">
-    <button class="askbtn" data-ask="${esc(q)}">📷 이 화면 AI에게 물어보기</button>
-  </div>`;
-}
-
 function render(){
   const f = FLOWS[flowKey];
   const s = f.screens[cur];
-  const step = s.step || 0;
-  const total = f.steps || 0;
+  const step = s.step || (f.order ? f.order.indexOf(cur) + 1 : 0);
+  const total = f.steps || (f.order ? f.order.length : 0);
 
-  btnBack.disabled = stack.length === 0;
+  btnBack.disabled = !flowKey;
 
   let head = `<div class="k-head">
     <span class="k-brand">${esc(f.brand)}</span>
-    <span class="k-step">${total ? step + ' / ' + total + ' 단계' : ''}</span>
+    <span class="k-step">${step} / ${total} 단계</span>
   </div>`;
 
   let body = '';
-  let showAsk = true;
 
   if(s.kind === 'attract'){
     head = '';
     body = `<div class="attract">
       <div class="attract-title">${nl(s.title)}</div>
       <div class="attract-sub">${esc(s.sub || '')}</div>
-      <div class="touch${help ? ' hint' : ''}">누르기</div>
+      <div class="touch">누르기</div>
     </div>`;
   }
 
@@ -857,54 +644,33 @@ function render(){
         ? typed.slice(0, 6) + ' - ' + typed.slice(6)
         : typed;
     }
-    const left = s.len - typed.length;
-    const ready = typed.length === s.len;
     body = `<h2 class="k-title">${nl(s.title)}</h2>
       ${s.sub ? `<p class="k-sub">${esc(s.sub)}</p>` : ''}
-      ${s.practice ? `<div class="practice-num">
-        <div class="pn-label">${esc(s.practiceLabel || '연습번호')}</div>
-        <div class="pn-value">${esc(s.practice)}</div>
-        ${s.warn ? `<div class="pn-warn">${esc(s.warn)}</div>` : ''}
-      </div>` : ''}
-      <div class="display" id="disp">${shown ? esc(shown) : `<span class="ph">${esc(s.ph || '')}</span>`}</div>
-      <p class="k-sub" style="margin-bottom:14px">${ready ? '다 눌렀습니다. 아래 확인을 눌러주세요' : left + '자리 더 눌러주세요'}</p>
+      <div class="display">${shown ? esc(shown) : `<span class="ph">${esc(s.ph || '')}</span>`}</div>
       <div class="pad">
         ${[1,2,3,4,5,6,7,8,9].map(n => `<button class="key" data-key="${n}">${n}</button>`).join('')}
-        <button class="key act" data-key="del">지우기</button>
+        <button class="key del" data-key="del">지우기</button>
         <button class="key" data-key="0">0</button>
-        <button class="key act${ready ? ' hint' : ''}" data-key="ok" ${ready ? '' : 'disabled'}>확인</button>
+        <button class="key act${typed.length === s.len ? ' hint' : ''}" data-key="ok" ${typed.length === s.len ? '' : 'disabled'}>확인</button>
       </div>`;
   }
 
   else if(s.kind === 'finger'){
     body = `<h2 class="k-title">${nl(s.title)}</h2>
       ${s.sub ? `<p class="k-sub">${esc(s.sub)}</p>` : ''}
-      <div class="finger"><button class="${help ? 'hint' : ''}" data-next="${s.next}"><span class="ring"></span>손가락을 여기에</button></div>`;
-  }
-
-  else if(s.kind === 'card'){
-    body = `<h2 class="k-title">${nl(s.title)}</h2>
-      ${s.sub ? `<p class="k-sub">${esc(s.sub)}</p>` : ''}
-      <div class="cardwrap">
-        <button class="cardslot hint" data-next="${s.next}">
-          <span class="slot-arrow">▼</span>
-          <span class="slot-line"></span>
-          <span class="slot-text">여기에 카드를 넣고<br>화면을 눌러주세요</span>
-        </button>
-      </div>`;
+      <div class="finger"><button data-next="${s.next}"><span class="ring"></span>손가락을 여기에</button></div>`;
   }
 
   else if(s.kind === 'wait'){
-    showAsk = false;
     body = `<div class="waiting">
       <div class="bars"><i></i><i></i><i></i><i></i></div>
       <h2 class="k-title">${nl(s.title)}</h2>
       ${s.sub ? `<p class="k-sub">${esc(s.sub)}</p>` : ''}
+      <div class="tap">다 읽으셨으면 화면을 눌러주세요</div>
     </div>`;
   }
 
   else if(s.kind === 'done'){
-    showAsk = false;
     const num = typeof s.num === 'function' ? s.num(state) : s.num;
     body = `<div class="done">
       <div class="ticket">
@@ -912,7 +678,6 @@ function render(){
         <div class="ticket-num">${esc(num)}</div>
       </div>
       <p class="done-msg">${nl(nx(s.msg))}</p>
-      ${verdictHTML(f)}
       <div class="done-btns">
         <button class="opt primary" data-restart="1"><span class="opt-main"><span class="opt-label">한 번 더 해보기</span></span></button>
         <button class="opt ghost" data-home="1"><span class="opt-main"><span class="opt-label">다른 기계 해보기</span></span></button>
@@ -920,12 +685,11 @@ function render(){
     </div>`;
   }
 
-  kiosk.innerHTML = head + `<div class="k-body">${body}${showAsk ? askHTML(s, f) : ''}</div>`;
+  kiosk.innerHTML = head + `<div class="k-body">${body}</div>`;
   kiosk.classList.toggle('help', help);
 
   kiosk.querySelectorAll('[data-next]').forEach(el => {
     el.onclick = () => {
-      const before = snap();
       const i = el.dataset.i;
       const opt = (i !== undefined && s.opts) ? s.opts[i] : null;
       if(opt){
@@ -937,13 +701,9 @@ function render(){
         }
         if(opt.reset){ state.cart = []; state.temp = ''; }
       }
-      go(el.dataset.next, true, before);
+      go(el.dataset.next);
     };
   });
-
-  const askBtn = kiosk.querySelector('[data-ask]');
-  if(askBtn) askBtn.onclick = () => openSheet(askBtn.dataset.ask);
-
   const restart = kiosk.querySelector('[data-restart]');
   if(restart) restart.onclick = () => startFlow(flowKey);
   const goHome = kiosk.querySelector('[data-home]');
@@ -957,91 +717,46 @@ function render(){
     kiosk.querySelectorAll('[data-key]').forEach(b => {
       b.onclick = () => {
         const k = b.dataset.key;
-        if(k === 'del'){ typed = typed.slice(0, -1); }
+        if(k === 'del') typed = typed.slice(0, -1);
         else if(k === 'ok'){ go(nx(s.next)); return; }
-        else if(typed.length < s.len){ typed += k; }
-        else {
-          const d = document.getElementById('disp');
-          if(d){ d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); }
-          toast('다 눌렀습니다. 확인을 눌러주세요');
-          return;
-        }
+        else if(typed.length < s.len) typed += k;
         render();
       };
     });
   }
 
   if(s.kind === 'wait'){
-    timer = setTimeout(() => go(nx(s.next)), s.ms || 2000);
+    const w = kiosk.querySelector('.waiting');
+    if(w) w.onclick = () => go(nx(s.next));
+    timer = setTimeout(() => go(nx(s.next)), s.ms || 3500);
   }
+
+  armBack();
+  window.scrollTo(0, 0);
+  checkMore();
 }
 
-/* ---------- 미션 채점 ---------- */
-function verdictHTML(f){
-  if(typeof f.review !== 'function') return '';
-  const items = f.review(state);
-  const pass = items.every(it => it[0]);
-  const rows = items.map(it =>
-    `<div class="v-item ${it[0] ? 'yes' : 'no'}">
-      <span class="v-mark">${it[0] ? '✓' : '!'}</span>
-      <span>${esc(it[1])}</span>
-    </div>`).join('');
-  return `<div class="verdict ${pass ? 'pass' : 'near'}">
-    <div class="v-head">${pass ? '미션 성공! 혼자 해내셨어요' : '거의 다 왔어요'}</div>
-    ${rows}
-  </div>`;
+/* 화면 밖에 선택지가 더 있으면 알려준다 */
+const moreEl = document.getElementById('more');
+function checkMore(){
+  requestAnimationFrame(() => {
+    const left = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+    moreEl.classList.toggle('show', left > 30);
+  });
 }
+window.addEventListener('scroll', checkMore, { passive: true });
+window.addEventListener('resize', checkMore);
 
-/* ---------- AI 물어보기 ---------- */
-let curPrompt = '';
-function openSheet(text){
-  curPrompt = text;
-  promptBox.textContent = text;
-  sheet.classList.add('on');
-}
-function closeSheet(){ sheet.classList.remove('on'); }
-
-function copyText(t){
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(t).then(() => toast('복사했습니다')).catch(() => fallbackCopy(t));
-  } else fallbackCopy(t);
-}
-function fallbackCopy(t){
-  const ta = document.createElement('textarea');
-  ta.value = t;
-  ta.style.position = 'fixed'; ta.style.top = '-1000px';
-  document.body.appendChild(ta);
-  ta.select(); ta.setSelectionRange(0, t.length);
-  let ok = false;
-  try{ ok = document.execCommand('copy'); }catch(e){}
-  document.body.removeChild(ta);
-  toast(ok ? '복사했습니다' : '문장을 길게 눌러 복사해주세요');
-}
-
-document.getElementById('btnCopy').onclick = () => copyText(curPrompt);
-document.getElementById('btnCloseSheet').onclick = closeSheet;
-sheet.onclick = e => { if(e.target === sheet) closeSheet(); };
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSheet(); });
-
-/* ---------- 상단 버튼 ---------- */
 btnHelp.onclick = () => {
   help = !help;
   btnHelp.classList.toggle('on', help);
   kiosk.classList.toggle('help', help);
-  if(flowKey && cur) render();
 };
-btnBack.onclick = () => {
-  if(!stack.length) return;
-  clearTimer();
-  const prev = stack.pop();
-  cur = prev.id;
-  state = prev.st;
-  typed = '';
-  render();
-};
+btnBack.onclick = () => { if(stack.length || flowKey) stepBack(); };
 btnHome.onclick = home;
 
 home();
+checkMore();
 </script>
 </body>
 </html>
